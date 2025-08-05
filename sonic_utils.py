@@ -9,12 +9,17 @@ import shutil
 import uuid
 import json
 import inspect
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+
+load_dotenv()
+LOGLEVEL = os.getenv('LOGLEVEL')
 
 def start_logger():
     '''
     Inizializza il logger di sistema
     '''
-    log_level = read_config_parameter('environment', 'log_level')
+    log_level = LOGLEVEL
     if log_level == 'info':
         logger = logging.INFO
     if log_level == 'debug':
@@ -47,21 +52,14 @@ def write_log_message(log_message, loglevel='info'):
         logging.critical(log_message)
 
 
-def read_config_parameter(area, key):
-
-    config_file_path = os.path.join("conf", "conf.yml")
-    with open(config_file_path, "r") as yamlfile:
-        data = yaml.load(yamlfile, Loader=yaml.FullLoader)
-
-    return data[area][key]
-
 
 def wait_cycle():
 
-    wait_time = read_config_parameter('environment', 'wait_time')
+    wait_time = int(os.getenv('WAIT_CYCLE'))
     write_log_message("Entering wait cycle for " + str(wait_time) + " seconds")
 
     time.sleep(wait_time)
+
 
 def sleep_system():
     '''
@@ -242,6 +240,11 @@ def check_time_interval(timestamp_1, timestamp_2, interval):
         return False
     else:
         return True
+
+def html_to_text(html_content):
+    """Estrae testo puro dal contenuto HTML"""
+    soup = BeautifulSoup(html_content, "html.parser")
+    return soup.get_text(separator="\n", strip=True)
 
 
 
