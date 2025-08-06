@@ -31,16 +31,13 @@ if __name__ == "__main__":
             has_ref_id = mago.check_reference_id(old_subject)
 
             if not has_ref_id:
-                #bearer_token = mago.atium_login()
-                bearer_token = True
+                bearer_token = mago.atium_login()
                 if bearer_token:
 
-                    #is_valid_client, atium_client_id = mago.atium_check_user(mail_sender, bearer_token)
-                    is_valid_client, atium_client_id = True, 12345
+                    is_valid_client, atium_client_id = mago.atium_check_user(mail_sender, bearer_token)
                     if is_valid_client:
-                        #return_code = mago.open_ticket(atium_client_id, bearer_token, service_area='Undistinguished',
-                        #                               description=mail_body)
-                        return_code = True
+                        return_code = mago.open_ticket(atium_client_id, bearer_token, service_area='Undistinguished',
+                                                       description=mail_body)
                         if return_code:
                             utils.write_log_message("Ticket aperto con successo")
                             new_subject = f"Ticket Opened - {old_subject}"
